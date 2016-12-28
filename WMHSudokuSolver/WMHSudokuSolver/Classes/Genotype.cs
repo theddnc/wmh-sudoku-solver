@@ -13,9 +13,9 @@ namespace SudokuSolver
             this.GeneSequence = sequence;
         }
 
-        public Genotype(Sudoku sudoku)
+        public Genotype(Phenotype phenotype)
         {
-            this.Sudoku = sudoku;
+            this.GeneSequence = new List<int>(phenotype.Genotype.GeneSequence);
             //this.GeneSequence = Enumerable.Range(1, count).OrderBy(a => Randomizer.Instance.GetProbability()).ToList();
         }
         

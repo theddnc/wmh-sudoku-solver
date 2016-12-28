@@ -9,12 +9,12 @@ namespace SudokuSolver
     class FitnessEvaluator
     {
 
-        public FitnessEvaluator(Solution solution, Sudoku sudoku) {
+        public FitnessEvaluator(Genotype genotype) {
            
         }
 
         public float Evaluate() {
-            
+            return 0.0F;
         }
 
     }
