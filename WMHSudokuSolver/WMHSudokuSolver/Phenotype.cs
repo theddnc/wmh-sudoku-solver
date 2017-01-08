@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WMHSudokuSolver.Classes;
 
-namespace SudokuSolver
+namespace WMHSudokuSolver
 {
     class Phenotype
     {
         public Phenotype(Genotype genotype, Sudoku solution)
         {
             this.Genotype = genotype;
-            this.Fitness = this.evaluateFitness());
+            this.Fitness = this.evaluateFitness();
         }
 
         public Phenotype(Sudoku puzzle, Sudoku solution)

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WMHSudokuSolver.Classes;
 
-namespace SudokuSolver
+namespace WMHSudokuSolver
 {
     class Genotype
     {
@@ -32,7 +28,7 @@ namespace SudokuSolver
             //build a list that contains missing numbers: 1, ..., 1, 2, ..., 2, ..., etc
             foreach (int number in missingNumbersCountsList)
             {
-                numbersToDrawFrom.AddRange(Enumerable.Repeat(number, missingNumbersCountsList[number]);
+                numbersToDrawFrom.AddRange(Enumerable.Repeat(number, missingNumbersCountsList[number]));
             }
 
             //fill in the blanks randomly

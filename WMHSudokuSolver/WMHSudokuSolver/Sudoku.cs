@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WMHSudokuSolver.Classes
+namespace WMHSudokuSolver
 {
     class Sudoku
     {
@@ -17,6 +17,15 @@ namespace WMHSudokuSolver.Classes
         public const int ColumnFieldsCount = 9;
         public const int RowsCount = 9;
         public const int ColumsCount = 9;
+        public const int SectionRowCount = 3;
+        public const int SectionCount = 9;
+
+        public enum DifficultyLevel
+        {
+            Easy,
+            Medium,
+            Hard
+        }
         public Sudoku(List<int> board)
         {
             this.Board = board;
