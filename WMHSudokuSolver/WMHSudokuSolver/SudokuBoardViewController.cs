@@ -27,11 +27,15 @@ namespace WMHSudokuSolver
                     {
                         int id = sectionId * Sudoku.SectionCount + fieldY* Sudoku.SectionRowCount + fieldX;
                         int value = sudoku.Board[id];
+                        int rowId = (sectionId / Sudoku.SectionRowCount) * Sudoku.SectionRowCount + fieldY;
+                        int colId = sectionId % Sudoku.SectionRowCount * Sudoku.SectionRowCount + fieldX;
                         if (value != Sudoku.EmptyFieldMarker)
                         {
-                            int rowId = (sectionId / Sudoku.SectionRowCount) * Sudoku.SectionRowCount + fieldY;
-                            int colId = sectionId % Sudoku.SectionRowCount * Sudoku.SectionRowCount + fieldX;
                             SudokuBoardView.Rows[rowId].Cells[colId].Value = value;
+                        }
+                        else
+                        {
+                            SudokuBoardView.Rows[rowId].Cells[colId].Value = null;
                         }
                     }
                 }

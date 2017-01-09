@@ -62,6 +62,7 @@
     <Compile Include="Solver.cs" />
     <Compile Include="Sudoku.cs" />
     <Compile Include="SudokuBoardViewController.cs" />
+    <Compile Include="SudokuPuzzle.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

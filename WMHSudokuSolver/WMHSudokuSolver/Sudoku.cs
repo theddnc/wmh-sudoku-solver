@@ -22,13 +22,19 @@ namespace WMHSudokuSolver
 
         public enum DifficultyLevel
         {
-            Easy,
-            Medium,
-            Hard
+            None = 0,
+            Easy = 20,
+            Medium = 30,
+            Hard = 40
         }
         public Sudoku(List<int> board)
         {
             this.Board = board;
+        }
+
+        public Sudoku(int[] board)
+        {
+            this.Board = board.ToList<int>();
         }
         public List<int> Board { get; private set; }
 

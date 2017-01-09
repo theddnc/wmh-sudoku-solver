@@ -48,12 +48,8 @@ namespace WMHSudokuSolver
 
         private void button2_Click(object sender, EventArgs e)
         {
-            List<int> list = new List<int>();
-            for (int i = 0; i < 81; i++)
-            {
-                list.Add(i % 9);
-            }
-            Sudoku sudoku = new Sudoku(list);
+            Sudoku.DifficultyLevel diffLevel = (Sudoku.DifficultyLevel)diffLevelComboBox.SelectedValue;
+            sudoku = SudokuPuzzle.generatePuzzle(9).getSudoku(diffLevel);
             sudokuBoardViewController.updateBoardView(sudoku);
         }
 
