@@ -66,7 +66,7 @@ namespace WMHSudokuSolver
                     {
                         child.Mutate();
                     }
-                    this.Population.Add(new Phenotype(child, this.Solution));
+                    this.Population.Add(new Phenotype(child, this.Puzzle));
                 }
             }
         }

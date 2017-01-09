@@ -17,11 +17,11 @@ namespace WMHSudokuSolver
         public Genotype(Phenotype phenotype)
         {
             this.GeneSequence = new List<int>(phenotype.Genotype.GeneSequence);
-            //this.GeneSequence = Enumerable.Range(1, count).OrderBy(a => Randomizer.Instance.GetProbability()).ToList();
         }
 
         public Genotype(Sudoku puzzle)
         {
+            this.ConstIndexes = puzzle.FilledFieldIndexes;
             List<int> numbersToDrawFrom = new List<int>();
             List<int> missingNumbersCountsList = puzzle.MissingNumbersCountsList;
 
@@ -47,17 +47,30 @@ namespace WMHSudokuSolver
         public Genotype(Genotype toCopy)
         {
             this.GeneSequence = new List<int>(toCopy.GeneSequence);
+            this.ConstIndexes = toCopy.ConstIndexes;
         }
         public List<int> GeneSequence { get; private set; }
+        public List<int> ConstIndexes { get; set; }
 
         public void Mutate()
         {
             int section = Randomizer.Instance.GetRandomInt(0, GeneSequenceSectionCount);
-            int firstGene = section * GenesInSectionCount + Randomizer.Instance.GetRandomInt(0, GenesInSectionCount);
-            int secondGene = section * GenesInSectionCount + Randomizer.Instance.GetRandomInt(0, GenesInSectionCount);
+            int firstGene = this.selectMutationGeneInSection(section);
+            int secondGene = this.selectMutationGeneInSection(section);
             int temp = GeneSequence[firstGene];
             GeneSequence[firstGene] = GeneSequence[secondGene];
             GeneSequence[secondGene] = temp;
+        }
+
+        private int selectMutationGeneInSection(int section)
+        {
+            int gene = -1;
+            do
+            {
+                gene = section * GenesInSectionCount + Randomizer.Instance.GetRandomInt(0, GenesInSectionCount);
+            } while (this.ConstIndexes.Contains(gene));
+
+            return gene;
         }
 
         public List<Genotype> CrossOverWith(Genotype other)

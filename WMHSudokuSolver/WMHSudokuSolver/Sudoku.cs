@@ -67,5 +67,21 @@ namespace WMHSudokuSolver
                 return emptyFieldIndexes;
             }
         }
+
+        public List<int> FilledFieldIndexes
+        {
+            get
+            {
+                List<int> filledFieldIndexes = new List<int>();
+                for (int i = 0; i < TotalFieldCount; i++)
+                {
+                    if (this.Board[i] != EmptyFieldMarker)
+                    {
+                        filledFieldIndexes.Add(i);
+                    }
+                }
+                return filledFieldIndexes;
+            }
+        }
     }
 }

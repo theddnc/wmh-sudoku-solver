@@ -5,9 +5,10 @@ namespace WMHSudokuSolver
 {
     class Phenotype
     {
-        public Phenotype(Genotype genotype, Sudoku solution)
+        public Phenotype(Genotype genotype, Sudoku puzzle)
         {
             this.Genotype = genotype;
+            this.Genotype.ConstIndexes = puzzle.FilledFieldIndexes;
             this.Fitness = this.evaluateFitness();
         }
 
@@ -57,6 +58,13 @@ namespace WMHSudokuSolver
             }
 
             return column;
+        }
+
+        public List<int> getSectionWithIndex(int index)
+        {
+            const int numberOfFieldsInSection = 9;
+
+            return this.Genotype.GeneSequence.GetRange(index * numberOfFieldsInSection, numberOfFieldsInSection);
         }
 
         private float evaluateFitness()

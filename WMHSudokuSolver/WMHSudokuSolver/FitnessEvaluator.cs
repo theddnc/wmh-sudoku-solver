@@ -32,6 +32,16 @@ namespace WMHSudokuSolver
                 fitness += duplicates.Sum();
             }
 
+            foreach (int row in Enumerable.Range(0, Sudoku.SectionCount))
+            {
+                var duplicates = from field in this.Phenotype.getSectionWithIndex(row)
+                                 group field by field into g
+                                 let count = g.Count() - 1
+                                 select count;
+
+                fitness += duplicates.Sum();
+            }
+
             return fitness;
         }
 
