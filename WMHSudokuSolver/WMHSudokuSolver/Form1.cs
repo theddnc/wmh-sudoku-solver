@@ -13,27 +13,28 @@ namespace WMHSudokuSolver
     {
         private Sudoku sudoku;
         private Phenotype bestPhenotype;
-        private List<Phenotype> bestPhenotypes;
+        private Sudoku solvedSudoku;
         private SudokuBoardViewController sudokuBoardViewController;
         public MainWindow()
         {
             InitializeComponent();
             diffLevelComboBox.DataSource = Enum.GetValues(typeof(Sudoku.DifficultyLevel));
+            initChart();
+
+            sudokuBoardViewController = new SudokuBoardViewController();
+            inputTab.Controls.Add(sudokuBoardViewController.SudokuBoardView);
+        }
+
+        private void initChart()
+        {
             Series series = new Series("phenotypes");
             series.ChartType = SeriesChartType.Line;
             resultsChart.Series.Add(series);
             resultsChart.Series[0].XValueMember = "Iteration";
             resultsChart.Series[0].YValueMembers = "Fitness";
             resultsChart.ChartAreas["ChartArea1"].AxisY.LabelStyle.Format = "{0:0.00}";
-            //series.IsValueShownAsLabel = true;
+            resultsChart.Series[0].IsVisibleInLegend = false;
             resultsChart.ChartAreas["ChartArea1"].AxisX.Interval = 1;
-
-            sudokuBoardViewController = new SudokuBoardViewController();
-            inputTab.Controls.Add(sudokuBoardViewController.SudokuBoardView);
-        }
-
-        private void loadOrderFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -41,16 +42,18 @@ namespace WMHSudokuSolver
             MessageBox.Show("SUDOKUUUUUUU", "About");            
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void generateButton_Click(object sender, EventArgs e)
         {
-          
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
+            generateButton.IsAccessible = false;
+            String origText = generateButton.Text;
+            generateButton.Text = "Getting your sudoku, stay put";
             Sudoku.DifficultyLevel diffLevel = (Sudoku.DifficultyLevel)diffLevelComboBox.SelectedValue;
-            sudoku = SudokuPuzzle.generatePuzzle(9).getSudoku(diffLevel);
+            SudokuPuzzle generator = SudokuPuzzle.generatePuzzle(9);
+            sudoku = generator.getSudoku(diffLevel);
+            solvedSudoku = generator.getSudoku(Sudoku.DifficultyLevel.None);
             sudokuBoardViewController.updateBoardView(sudoku);
+            generateButton.IsAccessible = true;
+            generateButton.Text = origText;
         }
 
         private void solveButton_Click(object sender, EventArgs e)
@@ -68,49 +71,61 @@ namespace WMHSudokuSolver
             {
                 MessageBox.Show("Iteration count must be greater > 0");
             }
-            else if (crossingCountBox.Value*2>populationSizeBox.Value)
+            else if (crossingProbabilityBox.Value == 0 && mutationProbabilityBox.Value == 0)
             {
-                MessageBox.Show("Crossings count must be smaller that half of the population");
+                MessageBox.Show("Either mutation or crossings probability should be greater than 0");
             }
             else
             {
-              //  Solver.getInstance().Configure(order, (int)populationSizeBox.Value, (int)iterationCountBox.Value, (int)crossingCountBox.Value,(float)mutationProbabilityBox.Value);
-              //  solveButton.IsAccessible = false;
-              //  solveButton.Text = "Solving...";
-              //  GetResults();
-              ////  resultGridView.DataSource = medianPhenotypesViews;   
-              //  resultGridView.DataSource = bestPhenotypesViews;
-              //  loadChart(bestPhenotypesViews);
-              //  displaySequence();
-              //  tabControl1.SelectTab(1);
-              //  solveButton.IsAccessible = true;
-              //  solveButton.Text = "Solve";
+                //sudokuBoardViewController.updateBoardView(solvedSudoku, sudoku);
+
+                solveButton.IsAccessible = false;
+                solveButton.Text = "Solving...";
+                List<PhenotypeView> bestPhenotypesViews = solve();
+                resultGridView.DataSource = bestPhenotypesViews;
+                updateChart(bestPhenotypesViews);
+                displaySequence();
+                tabControl1.SelectTab(1);
+                solveButton.IsAccessible = true;
+                solveButton.Text = "Solve";
             }
         }
 
-        private void GetResults()
+        private List<PhenotypeView> solve()
         {
-            //bestPhenotypesViews = new List<PhenotypeView>();
-            //List<List<Phenotype>> populations;
+            List<PhenotypeView> bestPhenotypesViews = new List<PhenotypeView>();
+            // Tworzenie solvera
+            //  Solver.getInstance().Configure(order, (int)populationSizeBox.Value, (int)iterationCountBox.Value, (int)crossingCountBox.Value,(float)mutationProbabilityBox.Value);
+
+            // lista populacji z każdej iteracji
+            //List<List<Phenotype>> populations = new List<List<Phenotype>>();
             //populations = Solver.getInstance().Solve();
+            //bestPhenotype = populations[populations.Count - 1][0];
 
             //int i = 1;
             //foreach (List<Phenotype> population in populations)
             //{
-            //    bestPhenotypesViews.Add(new PhenotypeView(population[0].Fitness, i, population[0].UsedPipes.Count, population[0].UsedProfiles.Count, population[0].SumOfTheRings));
+            //    bestPhenotypes.Add(new PhenotypeView(population[0], i));
             //    i++;
             //}
-            //bestPhenotype = populations[populations.Count - 1][0];                  
+
+            // MOCK
+            for (int i = 0; i < 20; i++)
+            {
+                bestPhenotypesViews.Add(new PhenotypeView(solvedSudoku, Randomizer.Instance.GetRandomInt(0,20), i));
+            }
+
+            return bestPhenotypesViews;
         }
 
-        private void loadChart(List<Phenotype> views)
+        private void updateChart(List<PhenotypeView> views)
         {
             
             resultsChart.DataSource = views;
             //Scale chart
             double min=views[0].Fitness;
             double max = views[0].Fitness;
-            foreach (Phenotype pv in views)
+            foreach (PhenotypeView pv in views)
             {
                 min = Math.Min(min, pv.Fitness);
                 max = Math.Max(max, pv.Fitness);
@@ -127,18 +142,8 @@ namespace WMHSudokuSolver
         {
             popSizeResultLabel.Text = "Population size: " + Solver.getInstance().PopulationSize.ToString();
             probResultLabel.Text = "Mutation probablity: " + Solver.getInstance().MutationProbability.ToString();
-            crossCountResultLabel.Text = "Crossing count: " + Solver.getInstance().CrossOverCount.ToString();
+            crossCountResultLabel.Text = "Crossing probability: " + Solver.getInstance().CrossOverCount.ToString();
             itCountResultLabel.Text = "Iteration count: " + Solver.getInstance().IterationCount.ToString();
-            genotypeTextBox.Text = "";
-            phenotypeTextBox.Text = "";
-            foreach (int item in bestPhenotype.Genotype.GeneSequence)
-            {
-                genotypeTextBox.Text += item.ToString() + " ,";
-            }
-            //foreach (Material item in bestPhenotype.Sequence)
-            //{
-            //    phenotypeTextBox.Text += item.Type.ToString() +":"+item.Length.ToString() +" ,";
-            //}
         }
 
     }

@@ -17,7 +17,7 @@ namespace WMHSudokuSolver
             SudokuBoardView = getNewBoardView();
         }
 
-        public DataGridView updateBoardView(Sudoku sudoku)
+        public DataGridView updateBoardView(Sudoku sudoku, Sudoku startingSudoku = null)
         {
             for (int sectionId = 0; sectionId < Sudoku.SectionCount; sectionId++)
             {
@@ -25,22 +25,29 @@ namespace WMHSudokuSolver
                 {
                     for (int fieldX = 0; fieldX < Sudoku.SectionRowCount; fieldX++)
                     {
-                        int id = sectionId * Sudoku.SectionCount + fieldY* Sudoku.SectionRowCount + fieldX;
+                        int id = sectionId * Sudoku.SectionCount + fieldY * Sudoku.SectionRowCount + fieldX;
                         int value = sudoku.Board[id];
                         int rowId = (sectionId / Sudoku.SectionRowCount) * Sudoku.SectionRowCount + fieldY;
                         int colId = sectionId % Sudoku.SectionRowCount * Sudoku.SectionRowCount + fieldX;
-                        if (value != Sudoku.EmptyFieldMarker)
-                        {
-                            SudokuBoardView.Rows[rowId].Cells[colId].Value = value;
-                        }
-                        else
-                        {
-                            SudokuBoardView.Rows[rowId].Cells[colId].Value = null;
-                        }
+                        int startingValue = startingSudoku != null ? startingSudoku.Board[id] : value;
+                        updateCell(startingValue, value, rowId, colId);
                     }
                 }
             }
             return SudokuBoardView;
+        }
+
+        private void updateCell(int startingValue, int value, int rowId, int colId)
+        {
+            if (value != Sudoku.EmptyFieldMarker)
+            {
+                SudokuBoardView.Rows[rowId].Cells[colId].Value = value;
+                SudokuBoardView.Rows[rowId].Cells[colId].Style.ForeColor = startingValue != value ? Color.DarkGreen : Color.Black;
+            }
+            else
+            {
+                SudokuBoardView.Rows[rowId].Cells[colId].Value = null;
+            }
         }
 
         private DataGridView getNewBoardView()

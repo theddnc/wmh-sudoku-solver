@@ -41,18 +41,14 @@
             this.crossingCountLabel = new System.Windows.Forms.Label();
             this.iterationCountLabel = new System.Windows.Forms.Label();
             this.mutationProbabilityBox = new System.Windows.Forms.NumericUpDown();
-            this.crossingCountBox = new System.Windows.Forms.NumericUpDown();
+            this.crossingProbabilityBox = new System.Windows.Forms.NumericUpDown();
             this.iterationCountBox = new System.Windows.Forms.NumericUpDown();
             this.populationSizeLabel = new System.Windows.Forms.Label();
             this.populationSizeBox = new System.Windows.Forms.NumericUpDown();
             this.itemTypeLabel = new System.Windows.Forms.Label();
             this.diffLevelComboBox = new System.Windows.Forms.ComboBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.generateButton = new System.Windows.Forms.Button();
             this.resultTab = new System.Windows.Forms.TabPage();
-            this.phenotypeTextBox = new System.Windows.Forms.RichTextBox();
-            this.genotypeTextBox = new System.Windows.Forms.RichTextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.probResultLabel = new System.Windows.Forms.Label();
             this.crossCountResultLabel = new System.Windows.Forms.Label();
             this.itCountResultLabel = new System.Windows.Forms.Label();
@@ -61,14 +57,14 @@
             this.resultsChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.resultsLabel = new System.Windows.Forms.Label();
             this.resultGridView = new System.Windows.Forms.DataGridView();
-            this.summaryLabel = new System.Windows.Forms.Label();
             this.resultInputLabel = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.button2 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.inputTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mutationProbabilityBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.crossingCountBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.crossingProbabilityBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.iterationCountBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.populationSizeBox)).BeginInit();
             this.resultTab.SuspendLayout();
@@ -98,7 +94,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -122,13 +118,13 @@
             this.inputTab.Controls.Add(this.crossingCountLabel);
             this.inputTab.Controls.Add(this.iterationCountLabel);
             this.inputTab.Controls.Add(this.mutationProbabilityBox);
-            this.inputTab.Controls.Add(this.crossingCountBox);
+            this.inputTab.Controls.Add(this.crossingProbabilityBox);
             this.inputTab.Controls.Add(this.iterationCountBox);
             this.inputTab.Controls.Add(this.populationSizeLabel);
             this.inputTab.Controls.Add(this.populationSizeBox);
             this.inputTab.Controls.Add(this.itemTypeLabel);
             this.inputTab.Controls.Add(this.diffLevelComboBox);
-            this.inputTab.Controls.Add(this.button2);
+            this.inputTab.Controls.Add(this.generateButton);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
             this.inputTab.Padding = new System.Windows.Forms.Padding(3);
@@ -164,9 +160,9 @@
             this.crossingCountLabel.AutoSize = true;
             this.crossingCountLabel.Location = new System.Drawing.Point(475, 226);
             this.crossingCountLabel.Name = "crossingCountLabel";
-            this.crossingCountLabel.Size = new System.Drawing.Size(85, 13);
+            this.crossingCountLabel.Size = new System.Drawing.Size(105, 13);
             this.crossingCountLabel.TabIndex = 25;
-            this.crossingCountLabel.Text = "Crossings count:";
+            this.crossingCountLabel.Text = "Crossings probability:";
             // 
             // iterationCountLabel
             // 
@@ -197,18 +193,24 @@
             this.mutationProbabilityBox.Size = new System.Drawing.Size(120, 20);
             this.mutationProbabilityBox.TabIndex = 23;
             // 
-            // crossingCountBox
+            // crossingProbabilityBox
             // 
-            this.crossingCountBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.crossingCountBox.Location = new System.Drawing.Point(648, 224);
-            this.crossingCountBox.Maximum = new decimal(new int[] {
-            2147483647,
+            this.crossingProbabilityBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.crossingProbabilityBox.DecimalPlaces = 3;
+            this.crossingProbabilityBox.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.crossingProbabilityBox.Location = new System.Drawing.Point(648, 224);
+            this.crossingProbabilityBox.Maximum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
-            this.crossingCountBox.Name = "crossingCountBox";
-            this.crossingCountBox.Size = new System.Drawing.Size(120, 20);
-            this.crossingCountBox.TabIndex = 22;
+            this.crossingProbabilityBox.Name = "crossingProbabilityBox";
+            this.crossingProbabilityBox.Size = new System.Drawing.Size(120, 20);
+            this.crossingProbabilityBox.TabIndex = 22;
             // 
             // iterationCountBox
             // 
@@ -216,6 +218,11 @@
             this.iterationCountBox.Location = new System.Drawing.Point(648, 198);
             this.iterationCountBox.Maximum = new decimal(new int[] {
             2147483647,
+            0,
+            0,
+            0});
+            this.iterationCountBox.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
@@ -244,6 +251,11 @@
             this.populationSizeBox.Location = new System.Drawing.Point(648, 172);
             this.populationSizeBox.Maximum = new decimal(new int[] {
             2147483647,
+            0,
+            0,
+            0});
+            this.populationSizeBox.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
@@ -278,23 +290,19 @@
             this.diffLevelComboBox.TabIndex = 8;
             this.diffLevelComboBox.TabStop = false;
             // 
-            // button2
+            // generateButton
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(478, 127);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(287, 26);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Generate sudoku!";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.generateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.generateButton.Location = new System.Drawing.Point(478, 127);
+            this.generateButton.Name = "generateButton";
+            this.generateButton.Size = new System.Drawing.Size(287, 26);
+            this.generateButton.TabIndex = 4;
+            this.generateButton.Text = "Generate sudoku!";
+            this.generateButton.UseVisualStyleBackColor = true;
+            this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
             // 
             // resultTab
             // 
-            this.resultTab.Controls.Add(this.phenotypeTextBox);
-            this.resultTab.Controls.Add(this.genotypeTextBox);
-            this.resultTab.Controls.Add(this.label4);
-            this.resultTab.Controls.Add(this.label1);
             this.resultTab.Controls.Add(this.probResultLabel);
             this.resultTab.Controls.Add(this.crossCountResultLabel);
             this.resultTab.Controls.Add(this.itCountResultLabel);
@@ -303,7 +311,6 @@
             this.resultTab.Controls.Add(this.resultsChart);
             this.resultTab.Controls.Add(this.resultsLabel);
             this.resultTab.Controls.Add(this.resultGridView);
-            this.resultTab.Controls.Add(this.summaryLabel);
             this.resultTab.Controls.Add(this.resultInputLabel);
             this.resultTab.Location = new System.Drawing.Point(4, 22);
             this.resultTab.Margin = new System.Windows.Forms.Padding(0);
@@ -313,48 +320,6 @@
             this.resultTab.TabIndex = 1;
             this.resultTab.Text = "Results";
             this.resultTab.UseVisualStyleBackColor = true;
-            // 
-            // phenotypeTextBox
-            // 
-            this.phenotypeTextBox.Location = new System.Drawing.Point(397, 399);
-            this.phenotypeTextBox.Multiline = false;
-            this.phenotypeTextBox.Name = "phenotypeTextBox";
-            this.phenotypeTextBox.ReadOnly = true;
-            this.phenotypeTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Horizontal;
-            this.phenotypeTextBox.Size = new System.Drawing.Size(629, 20);
-            this.phenotypeTextBox.TabIndex = 34;
-            this.phenotypeTextBox.Text = "";
-            this.phenotypeTextBox.WordWrap = false;
-            // 
-            // genotypeTextBox
-            // 
-            this.genotypeTextBox.Location = new System.Drawing.Point(397, 347);
-            this.genotypeTextBox.Multiline = false;
-            this.genotypeTextBox.Name = "genotypeTextBox";
-            this.genotypeTextBox.ReadOnly = true;
-            this.genotypeTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Horizontal;
-            this.genotypeTextBox.Size = new System.Drawing.Size(629, 20);
-            this.genotypeTextBox.TabIndex = 33;
-            this.genotypeTextBox.Text = "";
-            this.genotypeTextBox.WordWrap = false;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(394, 380);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(81, 13);
-            this.label4.TabIndex = 32;
-            this.label4.Text = "Best phenotype";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(394, 328);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(75, 13);
-            this.label1.TabIndex = 31;
-            this.label1.Text = "Best genotype";
             // 
             // probResultLabel
             // 
@@ -409,9 +374,9 @@
             this.resultsChart.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.resultsChart.Legends.Add(legend1);
-            this.resultsChart.Location = new System.Drawing.Point(385, 23);
+            this.resultsChart.Location = new System.Drawing.Point(274, 23);
             this.resultsChart.Name = "resultsChart";
-            this.resultsChart.Size = new System.Drawing.Size(392, 273);
+            this.resultsChart.Size = new System.Drawing.Size(503, 273);
             this.resultsChart.TabIndex = 21;
             this.resultsChart.TabStop = false;
             this.resultsChart.Text = "Results:";
@@ -440,18 +405,8 @@
             this.resultGridView.RowHeadersVisible = false;
             this.resultGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.resultGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.resultGridView.Size = new System.Drawing.Size(367, 273);
+            this.resultGridView.Size = new System.Drawing.Size(257, 273);
             this.resultGridView.TabIndex = 19;
-            // 
-            // summaryLabel
-            // 
-            this.summaryLabel.AutoSize = true;
-            this.summaryLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.summaryLabel.Location = new System.Drawing.Point(394, 303);
-            this.summaryLabel.Name = "summaryLabel";
-            this.summaryLabel.Size = new System.Drawing.Size(61, 13);
-            this.summaryLabel.TabIndex = 2;
-            this.summaryLabel.Text = "Summary:";
             // 
             // resultInputLabel
             // 
@@ -466,6 +421,17 @@
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
+            // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Location = new System.Drawing.Point(478, 127);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(287, 26);
+            this.button2.TabIndex = 4;
+            this.button2.Text = "Generate sudoku!";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.generateButton_Click);
             // 
             // MainWindow
             // 
@@ -483,7 +449,7 @@
             this.inputTab.ResumeLayout(false);
             this.inputTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mutationProbabilityBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.crossingCountBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.crossingProbabilityBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.iterationCountBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.populationSizeBox)).EndInit();
             this.resultTab.ResumeLayout(false);
@@ -503,7 +469,6 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage resultTab;
-        private System.Windows.Forms.Label summaryLabel;
         private System.Windows.Forms.Label resultInputLabel;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.DataGridView resultGridView;
@@ -514,22 +479,19 @@
         private System.Windows.Forms.Label crossCountResultLabel;
         private System.Windows.Forms.Label itCountResultLabel;
         private System.Windows.Forms.Label popSizeResultLabel;
-        private System.Windows.Forms.RichTextBox phenotypeTextBox;
-        private System.Windows.Forms.RichTextBox genotypeTextBox;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage inputTab;
         private System.Windows.Forms.Button solveButton;
         private System.Windows.Forms.Label mutationProbabilityLabel;
         private System.Windows.Forms.Label crossingCountLabel;
         private System.Windows.Forms.Label iterationCountLabel;
         private System.Windows.Forms.NumericUpDown mutationProbabilityBox;
-        private System.Windows.Forms.NumericUpDown crossingCountBox;
+        private System.Windows.Forms.NumericUpDown crossingProbabilityBox;
         private System.Windows.Forms.NumericUpDown iterationCountBox;
         private System.Windows.Forms.Label populationSizeLabel;
         private System.Windows.Forms.NumericUpDown populationSizeBox;
         private System.Windows.Forms.Label itemTypeLabel;
         private System.Windows.Forms.ComboBox diffLevelComboBox;
+        private System.Windows.Forms.Button generateButton;
         private System.Windows.Forms.Button button2;
     }
 }
