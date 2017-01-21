@@ -18,11 +18,13 @@ namespace WMHSudokuSolver
         {
             this.ConstIndexes = new List<int>(phenotype.Genotype.ConstIndexes);
             this.GeneSequence = new List<int>(phenotype.Genotype.GeneSequence);
+            this.Puzzle = phenotype.Genotype.Puzzle;
         }
 
         public Genotype(Sudoku puzzle)
         {
             this.ConstIndexes = puzzle.FilledFieldIndexes;
+            this.Puzzle = puzzle;
             List<int> numbersToDrawFrom = new List<int>();
             List<int> missingNumbersCountsList = puzzle.MissingNumbersCountsList;
 
@@ -53,16 +55,17 @@ namespace WMHSudokuSolver
         public Genotype(Genotype toCopy)
         {
             this.GeneSequence = new List<int>(toCopy.GeneSequence);
-            this.ConstIndexes = toCopy.ConstIndexes;
+            this.ConstIndexes = new List<int>(toCopy.ConstIndexes);
+            this.Puzzle = toCopy.Puzzle;
         }
         public List<int> GeneSequence { get; private set; }
         public List<int> ConstIndexes { get; set; }
+        public Sudoku Puzzle;
 
         public void Mutate()
         {
-            int section = Randomizer.Instance.GetRandomInt(0, GeneSequenceSectionCount);
-            int firstGene = this.selectMutationGeneInSection(section);
-            int secondGene = this.selectMutationGeneInSection(section);
+            int firstGene = this.selectMutationGene();
+            int secondGene = this.selectMutationGene();
             int temp = GeneSequence[firstGene];
             GeneSequence[firstGene] = GeneSequence[secondGene];
             GeneSequence[secondGene] = temp;
@@ -74,6 +77,17 @@ namespace WMHSudokuSolver
             do
             {
                 gene = section * GenesInSectionCount + Randomizer.Instance.GetRandomInt(0, GenesInSectionCount);
+            } while (this.ConstIndexes.Contains(gene));
+
+            return gene;
+        }
+
+        private int selectMutationGene()
+        {
+            int gene = -1;
+            do
+            {
+                gene = Randomizer.Instance.GetRandomInt(0, GeneSequenceLength);
             } while (this.ConstIndexes.Contains(gene));
 
             return gene;
@@ -99,10 +113,15 @@ namespace WMHSudokuSolver
                 maleChild.Add(femaleGenes[i]);
             }
             List<Genotype> result = new List<Genotype>();
+
             var femaleGenotype = new Genotype(femaleChild);
             femaleGenotype.ConstIndexes = this.ConstIndexes;
+            femaleGenotype.Puzzle = this.Puzzle;
+
             var maleGenotype = new Genotype(maleChild);
             maleGenotype.ConstIndexes = this.ConstIndexes;
+            maleGenotype.Puzzle = this.Puzzle;
+
             result.Add(femaleGenotype); result.Add(maleGenotype);
             return result;
         }
