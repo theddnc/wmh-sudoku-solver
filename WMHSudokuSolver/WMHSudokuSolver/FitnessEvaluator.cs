@@ -14,7 +14,8 @@ namespace WMHSudokuSolver
 
             foreach (int row in Enumerable.Range(0, Sudoku.RowsCount))
             {
-                var duplicates = from field in this.Phenotype.getRowWithIndex(row)
+                var r = this.Phenotype.getRowWithIndex(row);
+                var duplicates = from field in r
                                  group field by field into g
                                  let count = g.Count() - 1
                                  select count;
@@ -24,7 +25,8 @@ namespace WMHSudokuSolver
 
             foreach (int row in Enumerable.Range(0, Sudoku.ColumsCount))
             {
-                var duplicates = from field in this.Phenotype.getColumnWithIndex(row)
+                var c = this.Phenotype.getColumnWithIndex(row);
+                var duplicates = from field in c
                                  group field by field into g
                                  let count = g.Count() - 1
                                  select count;
@@ -34,7 +36,8 @@ namespace WMHSudokuSolver
 
             foreach (int row in Enumerable.Range(0, Sudoku.SectionCount))
             {
-                var duplicates = from field in this.Phenotype.getSectionWithIndex(row)
+                var s = this.Phenotype.getSectionWithIndex(row);
+                var duplicates = from field in s
                                  group field by field into g
                                  let count = g.Count() - 1
                                  select count;

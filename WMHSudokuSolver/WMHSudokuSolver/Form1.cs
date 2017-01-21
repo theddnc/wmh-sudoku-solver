@@ -63,13 +63,13 @@ namespace WMHSudokuSolver
             {
                 MessageBox.Show("Generate sudoku first!");
             }
-            else if (populationSizeBox.Value == 0)
+            else if (populationSizeBox.Value <= 1)
             {
-                MessageBox.Show("Population size must be greater > 0");
+                MessageBox.Show("Population size must be greater than 1");
             }
             else if (iterationCountBox.Value == 0)
             {
-                MessageBox.Show("Iteration count must be greater > 0");
+                MessageBox.Show("Iteration count must be greater than 0");
             }
             else if (crossingProbabilityBox.Value == 0 && mutationProbabilityBox.Value == 0)
             {
@@ -81,10 +81,10 @@ namespace WMHSudokuSolver
 
                 solveButton.IsAccessible = false;
                 solveButton.Text = "Solving...";
-                List<PhenotypeView> bestPhenotypesViews = solve();
+                List<PhenotypeView> bestPhenotypesViews = this.solve();
                 resultGridView.DataSource = bestPhenotypesViews;
-                updateChart(bestPhenotypesViews);
-                displaySequence();
+                this.updateChart(bestPhenotypesViews);
+                this.displaySequence();
                 tabControl1.SelectTab(1);
                 solveButton.IsAccessible = true;
                 solveButton.Text = "Solve";
@@ -95,25 +95,25 @@ namespace WMHSudokuSolver
         {
             List<PhenotypeView> bestPhenotypesViews = new List<PhenotypeView>();
             // Tworzenie solvera
-            //  Solver.getInstance().Configure(order, (int)populationSizeBox.Value, (int)iterationCountBox.Value, (int)crossingCountBox.Value,(float)mutationProbabilityBox.Value);
+            Solver.getInstance().Configure(this.sudoku, (int)populationSizeBox.Value, (int)iterationCountBox.Value, (float)crossingProbabilityBox.Value,(float)mutationProbabilityBox.Value);
 
-            // lista populacji z każdej iteracji
-            //List<List<Phenotype>> populations = new List<List<Phenotype>>();
-            //populations = Solver.getInstance().Solve();
-            //bestPhenotype = populations[populations.Count - 1][0];
+            
+            List<List<Phenotype>> populations = new List<List<Phenotype>>();
+            populations = Solver.getInstance().Solve();
+            bestPhenotype = populations[populations.Count - 1][0];
 
-            //int i = 1;
-            //foreach (List<Phenotype> population in populations)
-            //{
-            //    bestPhenotypes.Add(new PhenotypeView(population[0], i));
-            //    i++;
-            //}
+            int i = 1;
+            foreach (List<Phenotype> population in populations)
+            {
+                bestPhenotypesViews.Add(new PhenotypeView(population[0], i));
+                i++;
+            }
 
             // MOCK
-            for (int i = 0; i < 20; i++)
-            {
-                bestPhenotypesViews.Add(new PhenotypeView(solvedSudoku, Randomizer.Instance.GetRandomInt(0,20), i));
-            }
+            //for (int i = 0; i < 20; i++)
+            //{
+            //    bestPhenotypesViews.Add(new PhenotypeView(solvedSudoku, Randomizer.Instance.GetRandomInt(0,20), i));
+            //}
 
             return bestPhenotypesViews;
         }
@@ -142,7 +142,7 @@ namespace WMHSudokuSolver
         {
             popSizeResultLabel.Text = "Population size: " + Solver.getInstance().PopulationSize.ToString();
             probResultLabel.Text = "Mutation probablity: " + Solver.getInstance().MutationProbability.ToString();
-            crossCountResultLabel.Text = "Crossing probability: " + Solver.getInstance().CrossOverCount.ToString();
+            crossCountResultLabel.Text = "Crossing probability: " + Solver.getInstance().CrossOverProbability.ToString();
             itCountResultLabel.Text = "Iteration count: " + Solver.getInstance().IterationCount.ToString();
         }
 

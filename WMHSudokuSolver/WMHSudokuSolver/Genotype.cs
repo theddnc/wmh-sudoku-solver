@@ -16,6 +16,7 @@ namespace WMHSudokuSolver
 
         public Genotype(Phenotype phenotype)
         {
+            this.ConstIndexes = new List<int>(phenotype.Genotype.ConstIndexes);
             this.GeneSequence = new List<int>(phenotype.Genotype.GeneSequence);
         }
 
@@ -26,22 +27,27 @@ namespace WMHSudokuSolver
             List<int> missingNumbersCountsList = puzzle.MissingNumbersCountsList;
 
             //build a list that contains missing numbers: 1, ..., 1, 2, ..., 2, ..., etc
-            foreach (int number in missingNumbersCountsList)
+            for (int i = 1; i <= GenesInSectionCount; ++i)
             {
-                numbersToDrawFrom.AddRange(Enumerable.Repeat(number, missingNumbersCountsList[number]));
+                for (int j = 0; j < missingNumbersCountsList[i]; j ++)
+                {
+                    numbersToDrawFrom.Add(i);
+                }
             }
 
+            var newBoard = new List<int>(puzzle.Board);
+
             //fill in the blanks randomly
-            foreach (int number in Enumerable.Range(0, puzzle.EmptyFieldCount))
+            for (int i = 0; i < puzzle.EmptyFieldCount; ++i)
             {
                 int randomIdx = Randomizer.Instance.GetRandomInt(0, numbersToDrawFrom.Count);
-                int emptyIdx = puzzle.EmptyFieldIndexes[number];
-                puzzle.Board[emptyIdx] = numbersToDrawFrom[randomIdx];
+                int emptyIdx = puzzle.EmptyFieldIndexes[i];
+                newBoard[emptyIdx] = numbersToDrawFrom[randomIdx];
                 numbersToDrawFrom.RemoveAt(randomIdx);
             }
 
             //all is done
-            this.GeneSequence = new List<int>(puzzle.Board);
+            this.GeneSequence = new List<int>(newBoard);
         }
         
         public Genotype(Genotype toCopy)
@@ -93,7 +99,11 @@ namespace WMHSudokuSolver
                 maleChild.Add(femaleGenes[i]);
             }
             List<Genotype> result = new List<Genotype>();
-            result.Add(new Genotype(femaleChild)); result.Add(new Genotype(maleChild));
+            var femaleGenotype = new Genotype(femaleChild);
+            femaleGenotype.ConstIndexes = this.ConstIndexes;
+            var maleGenotype = new Genotype(maleChild);
+            maleGenotype.ConstIndexes = this.ConstIndexes;
+            result.Add(femaleGenotype); result.Add(maleGenotype);
             return result;
         }
     }

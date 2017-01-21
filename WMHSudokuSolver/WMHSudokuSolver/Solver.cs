@@ -24,18 +24,17 @@ namespace WMHSudokuSolver
             return instance;
         }
 
-        public void Configure(Sudoku solution, Sudoku puzzle, int popSize, int iterCount, int crossOverCount, float mutationProbability)
+        public void Configure(Sudoku puzzle, int popSize, int iterCount, float crossOverProbability, float mutationProbability)
         {
-            this.Solution = solution;
             this.Puzzle = puzzle;
             this.PopulationSize = popSize;
             this.IterationCount = iterCount;
-            this.CrossOverCount = crossOverCount;
+            this.CrossOverProbability = crossOverProbability;
             this.MutationProbability = mutationProbability;
             this.Population = new List<Phenotype>(PopulationSize);
             for (int i = 0; i < PopulationSize; ++i)
             {
-                Population.Add(new Phenotype(this.Puzzle, this.Solution));
+                Population.Add(new Phenotype(this.Puzzle));
             }
         }
 
@@ -43,7 +42,7 @@ namespace WMHSudokuSolver
         public Sudoku Puzzle { get; private set; }
         public int PopulationSize { get; private set; } //mi
         public int IterationCount { get; private set; }
-        public int CrossOverCount { get; private set; } //lambda - or probability?
+        public float CrossOverProbability { get; private set; } //lambda - or probability?
         public float MutationProbability { get; private set; }
 
         private List<Phenotype> Population { get; set; }
@@ -56,10 +55,17 @@ namespace WMHSudokuSolver
 
         private void Reproduce()
         {
-            List<Phenotype> reproducers = DrawReproducers();
+            List<Phenotype> reproducers = new List<Phenotype>(this.Population);
             for (int i = 0; i < reproducers.Count; i += 2)
             {
-                List<Genotype> newGenotypes = reproducers[i].Genotype.CrossOverWith(reproducers[i + 1].Genotype);
+                List<Genotype> newGenotypes = new List<Genotype>();
+                newGenotypes.Add(reproducers[i].Genotype);
+                newGenotypes.Add(reproducers[i+1].Genotype);
+
+                if (Randomizer.Instance.GetProbability() < this.CrossOverProbability)
+                {
+                    newGenotypes = reproducers[i].Genotype.CrossOverWith(reproducers[i + 1].Genotype);
+                } 
                 foreach (Genotype child in newGenotypes)
                 {
                     if (Randomizer.Instance.GetProbability() < this.MutationProbability)
@@ -69,23 +75,6 @@ namespace WMHSudokuSolver
                     this.Population.Add(new Phenotype(child, this.Puzzle));
                 }
             }
-        }
-
-        private List<Phenotype> DrawReproducers()
-        {
-            List<Phenotype> copiedPopulation = new List<Phenotype>(this.Population);
-            List<Phenotype> crossOverParticipants = new List<Phenotype>();
-            Randomizer rand = Randomizer.Instance;
-
-            for (int i = 0; i < this.CrossOverCount * 2; ++i)
-            {
-                int r = rand.GetRandomInt(0, copiedPopulation.Count);
-                Phenotype participant = copiedPopulation[r];
-                crossOverParticipants.Add(participant);
-                //copiedPopulation.Remove(participant); - Sampling Without Replacement?
-            }
-
-            return crossOverParticipants;
         }
 
         public List<List<Phenotype>> Solve()

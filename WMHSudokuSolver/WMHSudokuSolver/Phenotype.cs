@@ -13,7 +13,7 @@ namespace WMHSudokuSolver
             this.Fitness = this.evaluateFitness();
         }
 
-        public Phenotype(Sudoku puzzle, Sudoku solution)
+        public Phenotype(Sudoku puzzle)
         {
             this.Genotype = new Genotype(puzzle);
             this.Fitness = this.evaluateFitness();
@@ -34,10 +34,10 @@ namespace WMHSudokuSolver
             int startIdx = sectionNumber * numberOfFieldsInThreeRows + (index % numbersOfRowsInRowSection) * 3;
             int nextIdx = startIdx;
 
-            foreach (int i in Enumerable.Range(0, Sudoku.RowFieldsCount))
+            for (int i = 0; i < Sudoku.RowFieldsCount; ++i)
             {
                 row.Add(this.Genotype.GeneSequence[nextIdx]);
-                nextIdx = i % 3 == 0 ? nextIdx + remainingFieldsInSquareSection : nextIdx + 1;
+                nextIdx = (i+1) % 3 == 0 ? nextIdx + remainingFieldsInSquareSection : nextIdx + 1;
             }
 
             return row;
@@ -48,15 +48,16 @@ namespace WMHSudokuSolver
             List<int> column = new List<int>();
             const int numberOfColumnsInColumnSection = 3;
             const int remainingFieldsInSquareSection = 7;
-            const int numberOfFieldsInThreeRows = 27;
+            const int fieldsInSquareSection = 9;
+            const int remainingNumberOfFieldsInThreeRows = 21;
 
-            int startIdx = remainingFieldsInSquareSection * index / numberOfColumnsInColumnSection + index % numberOfColumnsInColumnSection;
+            int startIdx = fieldsInSquareSection * (index / numberOfColumnsInColumnSection) + index % numberOfColumnsInColumnSection;
             int nextIdx = startIdx;
 
             foreach (int i in Enumerable.Range(0, Sudoku.ColumnFieldsCount))
             {
                 column.Add(this.Genotype.GeneSequence[nextIdx]);
-                nextIdx = i % 3 == 0 ? nextIdx + numberOfFieldsInThreeRows : nextIdx + 3;
+                nextIdx = (i+1) % 3 == 0 ? nextIdx + remainingNumberOfFieldsInThreeRows : nextIdx + 3;
             }
 
             return column;

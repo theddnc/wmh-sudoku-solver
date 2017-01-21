@@ -50,9 +50,10 @@ namespace WMHSudokuSolver
         {
             get
             {
-                List<int> missingNumbers = new List<int>();
-                foreach(int number in Enumerable.Range(MinValue, MaxValue)) {
-                    missingNumbers[number] = MaxNumberCount - this.Board.Count(i => i == number);
+                List<int> missingNumbers = new List<int>(new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+                for(int number = MinValue; number <= MaxValue; ++number) {
+                    var count = MaxNumberCount - this.Board.Count(i => i == number);
+                    missingNumbers[number] = count < 0 ? 0 : count;
                 }
                 return missingNumbers;
             }
