@@ -86,6 +86,7 @@ namespace WMHSudokuSolver
                 this.updateChart(bestPhenotypesViews);
                 this.displaySequence();
                 tabControl1.SelectTab(1);
+                sudokuBoardViewController.updateBoardView(new Sudoku(bestPhenotype.Genotype.GeneSequence), sudoku);
                 solveButton.IsAccessible = true;
                 solveButton.Text = "Solve";
             }
@@ -108,12 +109,6 @@ namespace WMHSudokuSolver
                 bestPhenotypesViews.Add(new PhenotypeView(population[0], i));
                 i++;
             }
-
-            // MOCK
-            //for (int i = 0; i < 20; i++)
-            //{
-            //    bestPhenotypesViews.Add(new PhenotypeView(solvedSudoku, Randomizer.Instance.GetRandomInt(0,20), i));
-            //}
 
             return bestPhenotypesViews;
         }
